@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --primary: #2e7d32;
+      --accent: #4caf50;
+      --dark: #1b1b1b;
+      --text: #333;
+      --muted: #666;
+      --border: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 40px;
+    }
+
+    h2, h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    }
+
+    #user-info {
+      background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+      border-left: 6px solid var(--accent);
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 35px;
+    }
+
+    #user-data strong {
+      color: var(--dark);
+    }
+
+    #logout-btn {
+      background: var(--dark);
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background 0.3s ease;
+    }
+
+    #logout-btn:hover {
+      background: #333;
+    }
+  body.dark {
+    background: #121212 !important;
+    color: #ddd !important;
+  }
+  body.dark .card {
+    background: #1e1e1e !important;
+    border-color: #333 !important;
+  }
+  /* Ajusta más estilos para tema oscuro si quieres */
+    #token-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      width: 320px;
+    }
+
+    #token-display {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 10px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+      word-break: break-word;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .quick-actions button {
+      flex: 1;
+      min-width: 100px;
+      background: var(--accent);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .quick-actions button:hover {
+      background: #388e3c;
+    }
+
+    ul {
+      padding-left: 18px;
+    }
+
+    ul li {
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+
+    small {
+      font-size: 11px;
+      color: #eee;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Información del usuario -->
+  <div id="user-info">
+    <h2>Bienvenido al Dashboard</h2>
+    <p id="user-data">Cargando información del usuario...</p>
+    <button id="logout-btn" onclick="logout()">Cerrar Sesión</button>
+  </div>
+
+  <!-- Tarjetas comunes para todos -->
+  <div class="container">
+    <div class="card">
+      <h3>Resumen de Actividad</h3>
+      <p>Último acceso: <span id="last-login">Cargando...</span></p>
+      <p>Sesiones activas: <strong>1</strong></p>
+      <p>Tipo de usuario: <strong id="user-role">Cargando...</strong></p>
+    </div>
+
+    <div class="card">
+      <h3>Accesos Rápidos</h3>
+      <div class="quick-actions">
+<button onclick="window.location.href='configuracion.html'">Configuración</button>
+<button onclick="window.location.href='perfil.html'">Perfil</button>
+
+        <button onclick="logout()">Cerrar Sesión</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Estadísticas</h3>
+      <ul>
+        <li>Total de visitas hoy: <strong>58</strong></li>
+        <li>Usuarios activos: <strong>12</strong></li>
+        <li>Notificaciones pendientes: <strong>3</strong></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Noticias del sistema</h3>
+      <p>🆕 Nueva actualización disponible.<br>Consulta el registro de cambios en Configuración.</p>
+    </div>
+  </div>
+
+  <!-- Panel exclusivo para Administradores -->
+  <div id="admin-panel" class="container" style="display: none;">
+    <div class="card">
+      <h3>Gestión de Usuarios</h3>
+      <ul>
+        <li>Ver todos los usuarios</li>
+        <li>Asignar roles</li>
+        <li>Suspender cuentas</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Reportes del Sistema</h3>
+      <ul>
+        <li>Errores recientes: <strong>0</strong></li>
+        <li>Tiempo de actividad: <strong>99.9%</strong></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Panel exclusivo para Usuarios -->
+  <div id="user-panel" class="container" style="display: none;">
+    <div class="card">
+      <h3>Mi Actividad</h3>
+      <ul>
+        <li>Reservas realizadas: <strong>3</strong></li>
+        <li>Última acción: <strong>hace 1 hora</strong></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Soporte</h3>
+      <p>¿Tienes dudas? Contáctanos vía el <strong>chat en vivo</strong> o revisa las <strong>preguntas frecuentes</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Notificación de token -->
+  <div id="token-notification" style="display: none;">
+    <h3>Token generado con éxito</h3>
+    <div id="token-display"></div>
+    <small>Esta notificación se cerrará automáticamente</small>
+  </div>
+
+  <!-- Script de funcionalidad -->
+  <script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
+    const justLoggedIn = localStorage.getItem('justLoggedIn') === 'true';
+
+    const userData = document.getElementById('user-data');
+    const lastLogin = document.getElementById('last-login');
+    const userRole = document.getElementById('user-role');
+    const adminPanel = document.getElementById('admin-panel');
+    const userPanel = document.getElementById('user-panel');
+    const notif = document.getElementById('token-notification');
+    const tokenDisplay = document.getElementById('token-display');
+    const userInfo = document.getElementById('user-info');
+
+    if (!user || !token) {
+      window.location.href = '/';
+    } else {
+      userData.innerHTML = `
+        <strong>Usuario:</strong> ${user.username}<br>
+        <strong>Email:</strong> ${user.email}<br>
+        <strong>Rol:</strong> ${user.rol_id === 1 ? 'Administrador' : 'Usuario'}
+      `;
+      userRole.textContent = user.rol_id === 1 ? 'Administrador' : 'Usuario';
+      lastLogin.textContent = new Date().toLocaleString();
+
+      if (Number(user.rol_id) === 1) {
+        adminPanel.style.display = 'grid';
+      } else {
+        userPanel.style.display = 'grid';
+      }
+
+      if (justLoggedIn) {
+        tokenDisplay.textContent = token;
+        notif.style.display = 'block';
+        setTimeout(() => {
+          notif.style.transition = 'opacity 0.5s ease';
+          notif.style.opacity = '0';
+          setTimeout(() => notif.remove(), 500);
+        }, 5000);
+        localStorage.removeItem('justLoggedIn');
+      } else {
+        const heading = document.querySelector('#user-info h2');
+        heading.textContent = `Bienvenido de nuevo, ${user.username}!`;
+        const welcomeBack = document.createElement('p');
+        welcomeBack.textContent = "¡Nos alegra verte otra vez!";
+        welcomeBack.style.color = '#2e7d32';
+        welcomeBack.style.fontWeight = 'bold';
+        welcomeBack.style.marginTop = '10px';
+        welcomeBack.style.opacity = '0';
+        welcomeBack.style.transition = 'opacity 1s ease';
+        userInfo.appendChild(welcomeBack);
+        setTimeout(() => welcomeBack.style.opacity = '1', 300);
+      }
+    }
+
+    function logout() {
+      fetch('/api/logout', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).finally(() => {
+        localStorage.clear();
+        window.location.href = '/';
+      });
+    }
+     // Traducciones simples para textos fijos, aquí sólo ejemplo para dashboard y perfil
+  const textsGlobal = {
+    es: {
+      welcome: 'Bienvenido al Dashboard',
+      settings: 'Configuración',
+      profile: 'Perfil',
+      logout: 'Cerrar Sesión',
+      // ... otros textos que quieras traducir
+    },
+    en: {
+      welcome: 'Welcome to the Dashboard',
+      settings: 'Settings',
+      profile: 'Profile',
+      logout: 'Logout',
+      // ...
+    }
+  };
+
+  function applyGlobalLanguage() {
+    const lang = localStorage.getItem('lang') || 'es';
+    document.documentElement.lang = lang;
+
+    // Ejemplo: cambiar título principal si existe
+    const h2 = document.querySelector('h2');
+    if(h2) {
+      h2.textContent = textsGlobal[lang].welcome || h2.textContent;
+    }
+
+    // Cambiar texto de botones configuración y perfil si existen
+    const btnConfig = document.querySelector('button[onclick*="configuracion"]');
+    if(btnConfig) btnConfig.textContent = textsGlobal[lang].settings;
+
+    const btnProfile = document.querySelector('button[onclick*="perfil"]');
+    if(btnProfile) btnProfile.textContent = textsGlobal[lang].profile;
+
+    // Cambiar texto botón cerrar sesión
+    const btnLogout = document.querySelectorAll('button');
+    btnLogout.forEach(btn => {
+      if(btn.textContent.toLowerCase().includes('cerrar sesión') || btn.textContent.toLowerCase().includes('logout')){
+        btn.textContent = textsGlobal[lang].logout;
+      }
+    });
+  }
+
+  function applyGlobalTheme() {
+    const theme = localStorage.getItem('theme') || 'light';
+    if(theme === 'dark'){
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }
+
+  applyGlobalLanguage();
+  applyGlobalTheme();
+  </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Configuración</title>
+  <style>
+    :root {
+      --bg-light: #f4f6f8;
+      --card-bg-light: #ffffff;
+      --text-light: #333;
+      --border-light: #e0e0e0;
+
+      --bg-dark: #121212;
+      --card-bg-dark: #1e1e1e;
+      --text-dark: #ddd;
+      --border-dark: #333;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      margin: 0;
+      padding: 40px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    h1 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: var(--card-bg-light);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      max-width: 700px;
+      margin: auto;
+      border: 1px solid var(--border-light);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    body.dark .card {
+      background: var(--card-bg-dark);
+      border-color: var(--border-dark);
+      box-shadow: none;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: white;
+      color: black;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark select {
+      background: #333;
+      color: #ddd;
+      border-color: #555;
+    }
+
+    button {
+      background: #2e7d32;
+      color: white;
+      padding: 12px 20px;
+      margin-top: 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #1b5e20;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">Configuración</h1>
+<button id="back-to-dashboard" onclick="window.location.href='dashboard.html'" style="
+  margin-top: 30px;
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+">
+</button>
+
+<script>
+  const lang = localStorage.getItem('lang') || 'es';
+  const backBtn = document.getElementById('back-to-dashboard');
+  backBtn.textContent = lang === 'en' ? '← Back to Dashboard' : '← Volver al Dashboard';
+</script>
+
+  <div class="card">
+    <form id="config-form">
+      <label for="language" id="label-language">Idioma preferido:</label>
+      <select id="language" name="language">
+        <option value="es">Español</option>
+        <option value="en">Inglés</option>
+      </select>
+
+      <label for="theme" id="label-theme">Tema:</label>
+      <select id="theme" name="theme">
+        <option value="light">Claro</option>
+        <option value="dark">Oscuro</option>
+      </select>
+
+      <button type="submit" id="save-btn">Guardar cambios</button>
+    </form>
+  </div>
+
+  <script>
+    // Traducciones para español e inglés
+    const texts = {
+      es: {
+        title: 'Configuración',
+        languageLabel: 'Idioma preferido:',
+        themeLabel: 'Tema:',
+        saveBtn: 'Guardar cambios',
+      },
+      en: {
+        title: 'Settings',
+        languageLabel: 'Preferred language:',
+        themeLabel: 'Theme:',
+        saveBtn: 'Save changes',
+      }
+    };
+
+    // Función para aplicar traducción según idioma
+    function applyLanguage(lang) {
+      document.documentElement.lang = lang;
+      document.getElementById('title').textContent = texts[lang].title;
+      document.getElementById('label-language').textContent = texts[lang].languageLabel;
+      document.getElementById('label-theme').textContent = texts[lang].themeLabel;
+      document.getElementById('save-btn').textContent = texts[lang].saveBtn;
+    }
+
+    // Aplicar tema oscuro o claro
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+      }
+    }
+
+    // Cargar configuraciones guardadas
+    function loadSettings() {
+      const lang = localStorage.getItem('lang') || 'es';
+      const theme = localStorage.getItem('theme') || 'light';
+
+      document.getElementById('language').value = lang;
+      document.getElementById('theme').value = theme;
+
+      applyLanguage(lang);
+      applyTheme(theme);
+    }
+
+    // Guardar configuraciones
+    document.getElementById('config-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const lang = document.getElementById('language').value;
+      const theme = document.getElementById('theme').value;
+
+      localStorage.setItem('lang', lang);
+      localStorage.setItem('theme', theme);
+
+      applyLanguage(lang);
+      applyTheme(theme);
+
+      alert(lang === 'es' ? 'Cambios guardados' : 'Changes saved');
+    });
+
+    loadSettings();
+  </script>
+</body>
+</html>

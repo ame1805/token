@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registro</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #e9f5e9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .register-box {
+      background: #fff8f0;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+    .register-box h2 {
+      text-align: center;
+      color: #4b5320;
+      margin-bottom: 1.5rem;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      background-color: #6a994e;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #588157;
+    }
+    .message {
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
+    .error {
+      color: red;
+    }
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-box">
+    <h2>Crear cuenta</h2>
+    <input type="text" id="username" placeholder="Usuario" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Contraseña" required>
+    <button onclick="register()">Registrarse</button>
+    <div id="message" class="message"></div>
+  </div>
+
+  <script>
+    async function register() {
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const messageEl = document.getElementById('message');
+      messageEl.textContent = '';
+      messageEl.className = 'message';
+
+      if (!username || !email || !password) {
+        messageEl.textContent = 'Todos los campos son requeridos';
+        messageEl.classList.add('error');
+        return;
+      }
+
+      if (password.length < 8) {
+        messageEl.textContent = 'La contraseña debe tener al menos 8 caracteres';
+        messageEl.classList.add('error');
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password })
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          messageEl.textContent = 'Usuario registrado con éxito, redirigiendo a login...';
+          messageEl.classList.add('success');
+          setTimeout(() => {
+            window.location.href = '/login.html';
+          }, 2000);
+        } else {
+          messageEl.textContent = data.error || 'Error en el registro';
+          messageEl.classList.add('error');
+        }
+      } catch (error) {
+        messageEl.textContent = 'Error de conexión';
+        messageEl.classList.add('error');
+      }
+    }
+  </script>
+</body>
+</html>

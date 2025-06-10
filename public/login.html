@@ -221,7 +221,7 @@
 
       const countdownInterval = setInterval(() => {
         seconds--;
-        document.querySelector('.countdown').textContent = Redirigiendo en ${seconds} segundos...;
+        document.querySelector('.countdown').textContent = `Redirigiendo en ${seconds} segundos...`;
 
         if (seconds <= 0) {
           clearInterval(countdownInterval);

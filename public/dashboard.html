@@ -3,297 +3,282 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-/.../..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    :root {
+  --bg: #f4f6f8;
+  --card-bg: #ffffff;
+  --primary: #2a9d8f;
+  --accent: #fed6e3;
+  --accent-dark: #a8edea;
+  --text: #264653;
+  --muted: #666;
+  --border: #e0e0e0;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Variables para modo oscuro */
+body.dark {
+  --bg: #121212;
+  --card-bg: #1e1e1e;
+  --text: #e0e0e0;
+  --muted: #aaa;
+  --border: #333;
+  --shadow: rgba(255, 255, 255, 0.05);
+  --accent: #2c2c2c;
+  --accent-dark: #1a1a1a;
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: var(--text);
+}
+
+/* Reglas generales */
+body {
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: var(--text);
+  padding: 40px;
+  transition: background 0.4s ease, color 0.4s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+* {
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+
+/* Barra superior */
+.top-bar h2 {
+  color: var(--text);
+}
+
+.icon-buttons button {
+  background: rgba(255, 255, 255, 0.6);
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--primary);
+  box-shadow: 0 2px 6px var(--shadow);
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark .icon-buttons button {
+  background: rgba(255, 255, 255, 0.1);
+  color: #80cbc4;
+}
+
+.icon-buttons button:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Tarjetas */
+.card {
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 54px;
+  box-shadow: 0 8px 24px var(--shadow);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+  color: var(--text);
+}
+
+body.dark .card {
+  background: rgba(30, 30, 30, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Contenedor de usuario */
+#user-info {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 12px;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+body.dark #user-info {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Canvases */
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
     :root {
       --bg: #f4f6f8;
       --card-bg: #ffffff;
-      --primary: #2e7d32;
-      --accent: #4caf50;
-      --dark: #1b1b1b;
-      --text: #333;
+      --primary: #2a9d8f;
+      --accent: #fed6e3;
+      --accent-dark: #a8edea;
+      --text: #264653;
       --muted: #666;
       --border: #e0e0e0;
+      --shadow: rgba(0, 0, 0, 0.1);
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg);
+      background: linear-gradient(135deg, var(--accent-dark), var(--accent));
       color: var(--text);
-      margin: 0;
       padding: 40px;
+      transition: background 0.4s, color 0.4s;
     }
 
-    h2, h3 {
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .top-bar h2 {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .icon-buttons {
+      display: flex;
+      gap: 16px;
+    }
+
+    .icon-buttons button {
+      background: rgba(255,255,255,0.6);
+      border: none;
+      border-radius: 50%;
+      padding: 10px;
+      cursor: pointer;
+      font-size: 18px;
       color: var(--primary);
-      margin-bottom: 10px;
+      box-shadow: 0 2px 6px var(--shadow);
+      transition: background 0.3s;
+    }
+
+    .icon-buttons button:hover {
+      background: var(--primary);
+      color: #fff;
     }
 
     .container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
-      margin-top: 20px;
     }
 
     .card {
-      background: var(--card-bg);
-      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 15px;
       padding: 24px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-      border: 1px solid var(--border);
-      transition: box-shadow 0.2s ease;
+      box-shadow: 0 8px 24px var(--shadow);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: box-shadow 0.3s;
     }
 
     .card:hover {
-      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+    }
+
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    body.dark {
+      --bg: #1a1a1a;
+      --card-bg: #2c2c2c;
+      --text: #f5f5f5;
+      --shadow: rgba(255, 255, 255, 0.05);
     }
 
     #user-info {
-      background: linear-gradient(to right, #e8f5e9, #f1f8e9);
-      border-left: 6px solid var(--accent);
-      padding: 30px;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      margin-bottom: 35px;
-    }
-
-    #user-data strong {
-      color: var(--dark);
-    }
-
-    #logout-btn {
-      background: var(--dark);
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: background 0.3s ease;
-    }
-
-    #logout-btn:hover {
-      background: #333;
-    }
-  body.dark {
-    background: #121212 !important;
-    color: #ddd !important;
-  }
-  body.dark .card {
-    background: #1e1e1e !important;
-    border-color: #333 !important;
-  }
-  /* Ajusta más estilos para tema oscuro si quieres */
-    #token-notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: var(--accent);
-      color: white;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.2);
       padding: 20px;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      z-index: 1000;
-      width: 320px;
-    }
-
-    #token-display {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 10px;
-      border-radius: 6px;
-      font-family: monospace;
-      font-size: 13px;
-      word-break: break-word;
-    }
-
-    .quick-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .quick-actions button {
-      flex: 1;
-      min-width: 100px;
-      background: var(--accent);
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .quick-actions button:hover {
-      background: #388e3c;
-    }
-
-    ul {
-      padding-left: 18px;
-    }
-
-    ul li {
-      margin-bottom: 8px;
-      color: var(--muted);
-    }
-
-    small {
-      font-size: 11px;
-      color: #eee;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 20px;
-      }
+      color: var(--text);
     }
   </style>
 </head>
 <body>
-
-  <!-- Información del usuario -->
-  <div id="user-info">
-    <h2>Bienvenido al Dashboard</h2>
-    <p id="user-data">Cargando información del usuario...</p>
-    <button id="logout-btn" onclick="logout()">Cerrar Sesión</button>
+<div class="top-bar">
+  <h2 id="dashboard-title">Cargando...</h2>
+  <div class="icon-buttons">
+    <button onclick="window.location.href='configuracion.html'" title="Configuración">
+      <i class="fas fa-cog"></i>
+    </button>
+    <button onclick="window.location.href='perfil.html'" title="Perfil">
+      <i class="fas fa-user"></i>
+    </button>
+    <button onclick="logout()" title="Cerrar sesión">
+      <i class="fas fa-sign-out-alt"></i>
+    </button>
   </div>
+</div>
 
-  <!-- Tarjetas comunes para todos -->
+
+  <div id="user-info">Cargando usuario...</div>
+
   <div class="container">
     <div class="card">
-      <h3>Resumen de Actividad</h3>
-      <p>Último acceso: <span id="last-login">Cargando...</span></p>
-      <p>Sesiones activas: <strong>1</strong></p>
-      <p>Tipo de usuario: <strong id="user-role">Cargando...</strong></p>
+      <h3>Accesos por día</h3>
+      <canvas id="chart1"></canvas>
     </div>
-
     <div class="card">
-      <h3>Accesos Rápidos</h3>
-      <div class="quick-actions">
-<button onclick="window.location.href='configuracion.html'">Configuración</button>
-<button onclick="window.location.href='perfil.html'">Perfil</button>
-
-        <button onclick="logout()">Cerrar Sesión</button>
-      </div>
+      <h3>Distribución de Uso</h3>
+      <canvas id="chart2"></canvas>
     </div>
-
     <div class="card">
-      <h3>Estadísticas</h3>
-      <ul>
-        <li>Total de visitas hoy: <strong>58</strong></li>
-        <li>Usuarios activos: <strong>12</strong></li>
-        <li>Notificaciones pendientes: <strong>3</strong></li>
-      </ul>
+      <h3>Noticias</h3>
+      <p>Actualización v1.2 disponible con mejoras visuales y modo oscuro.</p>
     </div>
-
     <div class="card">
-      <h3>Noticias del sistema</h3>
-      <p>🆕 Nueva actualización disponible.<br>Consulta el registro de cambios en Configuración.</p>
+      <h3>Radar de Actividad</h3>
+      <canvas id="chart3"></canvas>
+    </div>
+    <div class="card">
+      <h3>Estadísticas Rápidas</h3>
+      <canvas id="chart4"></canvas>
     </div>
   </div>
 
-  <!-- Panel exclusivo para Administradores -->
-  <div id="admin-panel" class="container" style="display: none;">
-    <div class="card">
-      <h3>Gestión de Usuarios</h3>
-      <ul>
-        <li>Ver todos los usuarios</li>
-        <li>Asignar roles</li>
-        <li>Suspender cuentas</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Reportes del Sistema</h3>
-      <ul>
-        <li>Errores recientes: <strong>0</strong></li>
-        <li>Tiempo de actividad: <strong>99.9%</strong></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Panel exclusivo para Usuarios -->
-  <div id="user-panel" class="container" style="display: none;">
-    <div class="card">
-      <h3>Mi Actividad</h3>
-      <ul>
-        <li>Reservas realizadas: <strong>3</strong></li>
-        <li>Última acción: <strong>hace 1 hora</strong></li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Soporte</h3>
-      <p>¿Tienes dudas? Contáctanos vía el <strong>chat en vivo</strong> o revisa las <strong>preguntas frecuentes</strong>.</p>
-    </div>
-  </div>
-
-  <!-- Notificación de token -->
-  <div id="token-notification" style="display: none;">
-    <h3>Token generado con éxito</h3>
-    <div id="token-display"></div>
-    <small>Esta notificación se cerrará automáticamente</small>
-  </div>
-
-  <!-- Script de funcionalidad -->
   <script>
     const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem('token');
-    const justLoggedIn = localStorage.getItem('justLoggedIn') === 'true';
+    const lang = navigator.language || 'es';
 
-    const userData = document.getElementById('user-data');
-    const lastLogin = document.getElementById('last-login');
-    const userRole = document.getElementById('user-role');
-    const adminPanel = document.getElementById('admin-panel');
-    const userPanel = document.getElementById('user-panel');
-    const notif = document.getElementById('token-notification');
-    const tokenDisplay = document.getElementById('token-display');
-    const userInfo = document.getElementById('user-info');
+    if (!user || !token) window.location.href = '/';
 
-    if (!user || !token) {
-      window.location.href = '/';
-    } else {
-      userData.innerHTML = `
-        <strong>Usuario:</strong> ${user.username}<br>
-        <strong>Email:</strong> ${user.email}<br>
-        <strong>Rol:</strong> ${user.rol_id === 1 ? 'Administrador' : 'Usuario'}
-      `;
-      userRole.textContent = user.rol_id === 1 ? 'Administrador' : 'Usuario';
-      lastLogin.textContent = new Date().toLocaleString();
+    document.getElementById('user-info').innerHTML = `
+      <strong>${lang.startsWith('en') ? 'User' : 'Usuario'}:</strong> ${user.username}<br>
+      <strong>Email:</strong> ${user.email}<br>
+      <strong>${lang.startsWith('en') ? 'Role' : 'Rol'}:</strong> ${user.rol_id === 1 ? 'Administrador' : 'Usuario'}
+    `;
 
-      if (Number(user.rol_id) === 1) {
-        adminPanel.style.display = 'grid';
-      } else {
-        userPanel.style.display = 'grid';
-      }
+const visited = sessionStorage.getItem('visited');
+const welcomeMessage = visited
+  ? (lang.startsWith('en') ? `Welcome back, ${user.username} 😊` : `Nos alegra verte de nuevo, ${user.username} 😊`)
+  : (lang.startsWith('en') ? `Welcome, ${user.username} 👋` : `Bienvenido, ${user.username} 👋`);
 
-      if (justLoggedIn) {
-        tokenDisplay.textContent = token;
-        notif.style.display = 'block';
-        setTimeout(() => {
-          notif.style.transition = 'opacity 0.5s ease';
-          notif.style.opacity = '0';
-          setTimeout(() => notif.remove(), 500);
-        }, 5000);
-        localStorage.removeItem('justLoggedIn');
-      } else {
-        const heading = document.querySelector('#user-info h2');
-        heading.textContent = `Bienvenido de nuevo, ${user.username}!`;
-        const welcomeBack = document.createElement('p');
-        welcomeBack.textContent = "¡Nos alegra verte otra vez!";
-        welcomeBack.style.color = '#2e7d32';
-        welcomeBack.style.fontWeight = 'bold';
-        welcomeBack.style.marginTop = '10px';
-        welcomeBack.style.opacity = '0';
-        welcomeBack.style.transition = 'opacity 1s ease';
-        userInfo.appendChild(welcomeBack);
-        setTimeout(() => welcomeBack.style.opacity = '1', 300);
-      }
-    }
+document.getElementById('dashboard-title').textContent = welcomeMessage;
+sessionStorage.setItem('visited', 'true');
+
+
+    if (lang.startsWith('en')) document.body.classList.add('dark');
 
     function logout() {
       fetch('/api/logout', {
@@ -304,64 +289,78 @@
         window.location.href = '/';
       });
     }
-     // Traducciones simples para textos fijos, aquí sólo ejemplo para dashboard y perfil
-  const textsGlobal = {
-    es: {
-      welcome: 'Bienvenido al Dashboard',
-      settings: 'Configuración',
-      profile: 'Perfil',
-      logout: 'Cerrar Sesión',
-      // ... otros textos que quieras traducir
-    },
-    en: {
-      welcome: 'Welcome to the Dashboard',
-      settings: 'Settings',
-      profile: 'Profile',
-      logout: 'Logout',
-      // ...
-    }
-  };
 
-  function applyGlobalLanguage() {
-    const lang = localStorage.getItem('lang') || 'es';
-    document.documentElement.lang = lang;
-
-    // Ejemplo: cambiar título principal si existe
-    const h2 = document.querySelector('h2');
-    if(h2) {
-      h2.textContent = textsGlobal[lang].welcome || h2.textContent;
-    }
-
-    // Cambiar texto de botones configuración y perfil si existen
-    const btnConfig = document.querySelector('button[onclick*="configuracion"]');
-    if(btnConfig) btnConfig.textContent = textsGlobal[lang].settings;
-
-    const btnProfile = document.querySelector('button[onclick*="perfil"]');
-    if(btnProfile) btnProfile.textContent = textsGlobal[lang].profile;
-
-    // Cambiar texto botón cerrar sesión
-    const btnLogout = document.querySelectorAll('button');
-    btnLogout.forEach(btn => {
-      if(btn.textContent.toLowerCase().includes('cerrar sesión') || btn.textContent.toLowerCase().includes('logout')){
-        btn.textContent = textsGlobal[lang].logout;
-      }
+    new Chart(document.getElementById('chart1'), {
+      type: 'line',
+      data: {
+        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie'],
+        datasets: [{
+          label: 'Accesos',
+          data: [12, 19, 3, 5, 8],
+          backgroundColor: 'rgba(42,157,143,0.3)',
+          borderColor: 'rgba(42,157,143,1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
     });
-  }
 
-  function applyGlobalTheme() {
-    const theme = localStorage.getItem('theme') || 'light';
-    if(theme === 'dark'){
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
+    new Chart(document.getElementById('chart2'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Activos', 'Visitas', 'Alertas'],
+        datasets: [{
+          data: [25, 40, 10],
+          backgroundColor: ['#2a9d8f', '#64c9cf', '#a8edea']
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    new Chart(document.getElementById('chart3'), {
+      type: 'radar',
+      data: {
+        labels: ['Login', 'Uso', 'Consultas', 'Reportes'],
+        datasets: [{
+          label: 'Frecuencia',
+          data: [20, 15, 10, 5],
+          backgroundColor: 'rgba(42,157,143,0.2)',
+          borderColor: '#2a9d8f',
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true }
+    });
+
+    new Chart(document.getElementById('chart4'), {
+      type: 'bar',
+      data: {
+        labels: ['Admin', 'User'],
+        datasets: [{
+          label: 'Cantidad',
+          data: [5, 40],
+          backgroundColor: ['#fed6e3', '#a8edea']
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+      function applyGlobalLanguage() {
+      document.documentElement.lang = lang;
+      const h1 = document.querySelector('h1');
+      if (h1) {
+        h1.innerHTML = lang === 'en' ? '<i class="fas fa-user-circle"></i> User Profile' : '<i class="fas fa-user-circle"></i> Perfil de Usuario';
+      }
     }
-  }
 
-  applyGlobalLanguage();
-  applyGlobalTheme();
+    function applyGlobalTheme() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.body.classList.toggle('dark', theme === 'dark');
+    }
+
+    applyGlobalLanguage();
+    applyGlobalTheme();
   </script>
-
-
-
 </body>
 </html>

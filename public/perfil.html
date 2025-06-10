@@ -3,28 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <title>Perfil de Usuario</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f6f8;
+    :root {
+      --bg-light: linear-gradient(135deg, #a8edea, #fed6e3);
+      --bg-dark: #121212;
+      --card-bg-light: rgba(255, 255, 255, 0.8);
+      --card-bg-dark: #1e1e1e;
+      --primary: #2a9d8f;
+      --secondary: #1976d2;
+      --text-light: #264653;
+      --text-dark: #f5f5f5;
+      --border-light: #e0e0e0;
+      --border-dark: #333;
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: var(--bg-light);
+      color: var(--text-light);
       padding: 40px;
-      color: #333;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
     }
 
     h1 {
-      color: #2e7d32;
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 10px;
     }
 
     .card {
-      background: white;
+      background: var(--card-bg-light);
+      backdrop-filter: blur(10px);
       border-radius: 16px;
       padding: 24px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 8px 24px var(--shadow);
       max-width: 700px;
-      margin: auto;
-      margin-top: 30px;
-      border: 1px solid #e0e0e0;
+      margin: 30px auto;
+      border: 1px solid var(--border-light);
+      transition: background 0.4s, color 0.4s, border 0.4s;
+    }
+
+    body.dark .card {
+      background: var(--card-bg-dark);
+      border-color: var(--border-dark);
     }
 
     label {
@@ -39,10 +74,18 @@
       margin-top: 6px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      background: #fff;
+      color: #333;
+    }
+
+    body.dark input {
+      background: #2c2c2c;
+      color: #f5f5f5;
+      border: 1px solid #555;
     }
 
     button {
-      background: #2e7d32;
+      background: var(--primary);
       color: white;
       padding: 12px 20px;
       margin-top: 30px;
@@ -56,29 +99,26 @@
     button:hover {
       background: #1b5e20;
     }
+
+    #back-to-dashboard {
+      display: block;
+      margin: 0 auto 20px;
+      background: var(--secondary);
+      color: white;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    #back-to-dashboard:hover {
+      background: #115293;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Perfil de Usuario</h1>
-<button id="back-to-dashboard" onclick="window.location.href='dashboard.html'" style="
-  margin-top: 30px;
-  background: #1976d2;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
-">
-</button>
+  <h1><i class="fas fa-user-circle"></i> Perfil de Usuario</h1>
 
-<script>
-  const lang = localStorage.getItem('lang') || 'es';
-  const backBtn = document.getElementById('back-to-dashboard');
-  backBtn.textContent = lang === 'en' ? '← Back to Dashboard' : '← Volver al Dashboard';
-</script>
+  <button id="back-to-dashboard" onclick="window.location.href='dashboard.html'"></button>
 
   <div class="card">
     <form>
@@ -94,74 +134,42 @@
       <button type="submit">Actualizar perfil</button>
     </form>
   </div>
-<script>
-  // Traducciones simples para textos fijos, aquí sólo ejemplo para dashboard y perfil
-  const textsGlobal = {
-    es: {
-      welcome: 'Bienvenido al Dashboard',
-      settings: 'Configuración',
-      profile: 'Perfil',
-      logout: 'Cerrar Sesión',
-      // ... otros textos que quieras traducir
-    },
-    en: {
-      welcome: 'Welcome to the Dashboard',
-      settings: 'Settings',
-      profile: 'Profile',
-      logout: 'Logout',
-      // ...
-    }
-  };
 
-  function applyGlobalLanguage() {
+  <script>
     const lang = localStorage.getItem('lang') || 'es';
-    document.documentElement.lang = lang;
+    const backBtn = document.getElementById('back-to-dashboard');
+    backBtn.textContent = lang === 'en' ? '← Back to Dashboard' : '← Volver al Dashboard';
 
-    // Ejemplo: cambiar título principal si existe
-    const h2 = document.querySelector('h2');
-    if(h2) {
-      h2.textContent = textsGlobal[lang].welcome || h2.textContent;
-    }
-
-    // Cambiar texto de botones configuración y perfil si existen
-    const btnConfig = document.querySelector('button[onclick*="configuracion"]');
-    if(btnConfig) btnConfig.textContent = textsGlobal[lang].settings;
-
-    const btnProfile = document.querySelector('button[onclick*="perfil"]');
-    if(btnProfile) btnProfile.textContent = textsGlobal[lang].profile;
-
-    // Cambiar texto botón cerrar sesión
-    const btnLogout = document.querySelectorAll('button');
-    btnLogout.forEach(btn => {
-      if(btn.textContent.toLowerCase().includes('cerrar sesión') || btn.textContent.toLowerCase().includes('logout')){
-        btn.textContent = textsGlobal[lang].logout;
+    const textsGlobal = {
+      es: {
+        welcome: 'Bienvenido al Dashboard',
+        settings: 'Configuración',
+        profile: 'Perfil',
+        logout: 'Cerrar Sesión'
+      },
+      en: {
+        welcome: 'Welcome to the Dashboard',
+        settings: 'Settings',
+        profile: 'Profile',
+        logout: 'Logout'
       }
-    });
-  }
+    };
 
-  function applyGlobalTheme() {
-    const theme = localStorage.getItem('theme') || 'light';
-    if(theme === 'dark'){
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
+    function applyGlobalLanguage() {
+      document.documentElement.lang = lang;
+      const h1 = document.querySelector('h1');
+      if (h1) {
+        h1.innerHTML = lang === 'en' ? '<i class="fas fa-user-circle"></i> User Profile' : '<i class="fas fa-user-circle"></i> Perfil de Usuario';
+      }
     }
-  }
 
-  applyGlobalLanguage();
-  applyGlobalTheme();
-</script>
+    function applyGlobalTheme() {
+      const theme = localStorage.getItem('theme') || 'light';
+      document.body.classList.toggle('dark', theme === 'dark');
+    }
 
-<style>
-  body.dark {
-    background: #121212 !important;
-    color: #ddd !important;
-  }
-  body.dark .card {
-    background: #1e1e1e !important;
-    border-color: #333 !important;
-  }
-  /* Ajusta más estilos para tema oscuro si quieres */
-</style>
+    applyGlobalLanguage();
+    applyGlobalTheme();
+  </script>
 </body>
 </html>

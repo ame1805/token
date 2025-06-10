@@ -1,59 +1,127 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>Registro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #e9f5e9;
+      background: linear-gradient(to right, #eef2f3, #8ec5fc);
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      padding: 1rem;
     }
+
     .register-box {
-      background: #fff8f0;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 350px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      padding: 3rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: fadeIn 0.5s ease-in-out;
     }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .register-box h2 {
       text-align: center;
-      color: #4b5320;
-      margin-bottom: 1.5rem;
+      color: #264653;
+      margin-bottom: 2rem;
+      font-weight: 600;
     }
+
     input {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 1rem;
+      padding: 12px 14px;
+      margin-bottom: 1.5rem;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 0.95rem;
+      color: #333;
+      transition: 0.3s ease;
     }
+
+    input::placeholder {
+      color: #999;
+      font-style: italic;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2a9d8f;
+      box-shadow: 0 0 5px rgba(42, 157, 143, 0.3);
+    }
+
     button {
       width: 100%;
-      background-color: #6a994e;
+      background-color: #2a9d8f;
       color: white;
       padding: 12px;
       border: none;
-      border-radius: 5px;
-      font-weight: bold;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
       cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
     }
+
     button:hover {
-      background-color: #588157;
+      background-color: #21867a;
+      transform: translateY(-1px);
     }
+
     .message {
       margin-top: 1rem;
       text-align: center;
       font-weight: bold;
+      font-size: 0.9rem;
     }
+
     .error {
-      color: red;
+      color: #e63946;
     }
+
     .success {
-      color: green;
+      color: #2a9d8f;
+    }
+
+    .register-box p {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .register-box a {
+      color: #2a9d8f;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .register-box a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -65,6 +133,8 @@
     <input type="password" id="password" placeholder="Contraseña" required>
     <button onclick="register()">Registrarse</button>
     <div id="message" class="message"></div>
+
+    <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
   </div>
 
   <script>

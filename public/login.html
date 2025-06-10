@@ -1,143 +1,238 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Login</title>
-  <style>
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #e9f5e9;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
-.login-box {
-  background: #fff8f0;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 350px;
-}
-.login-box h2 {
-  text-align: center;
-  color: #4b5320;
-  margin-bottom: 1.5rem;
-}
-input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-button {
-  width: 100%;
-  background-color: #6a994e;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #588157;
-}
-.token-display {
-  background: #f3f3f3;
-  padding: 15px;
-  border-radius: 5px;
-  margin: 15px 0;
-  font-family: monospace;
-  border: 1px dashed #ccc;
-}
-.countdown {
-  color: #666;
-  font-style: italic;
-}
-
-</style>
-
-</head>
-<body>
-  <!-- Tu formulario de login actual -->
-  <div class="login-box">
-    <h2>Bienvenido</h2>
-    <input type="text" id="username" placeholder="Usuario">
-    <input type="password" id="password" placeholder="Contraseña">
-    <button onclick="login()">Iniciar Sesión</button>
-    <!-- Justo debajo del botón Iniciar Sesión -->
-<p style="text-align: center; margin-top: 10px;">
-  ¿No tienes cuenta? 
-  <a href="register.html" style="color: #6a994e; font-weight: bold; text-decoration: none;">
-    Regístrate aquí
-  </a>
-</p>
-
-    <div id="resultado"></div>
-  </div>
-
-  <script>
-    async function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-
-      try {
-        const response = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          // Guardar token y datos de usuario
-          localStorage.setItem('token', data.token);
-            localStorage.setItem('refreshToken', data.refreshToken); // <--- Guardar refresh token también
-          localStorage.setItem('user', JSON.stringify(data.user));
-          localStorage.setItem('justLoggedIn', 'true');  // 👈 Esto es clave
-
-          console.log('%cToken JWT', 'color: #4CAF50; font-weight: bold; font-size: 14px;', data.token);
-console.table({
-  'Token Header': JSON.parse(atob(data.token.split('.')[0])),
-  'Token Payload': JSON.parse(atob(data.token.split('.')[1])),
-  'Token Signature': data.token.split('.')[2]
-});
-          // Mostrar token con temporizador
-          showTokenWithCountdown(data.token);
-        } else {
-          document.getElementById('resultado').innerText = 'Error: ' + (data.error || data.message);
-        }
-      } catch (error) {
-        document.getElementById('resultado').innerText = 'Error de conexión';
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
       }
-    }
 
-    function showTokenWithCountdown(token) {
-      const resultado = document.getElementById('resultado');
-      let seconds = 5;
-      
-      resultado.innerHTML = `
-        <div class="token-display">
-          <h3>Token generado:</h3>
-          <div>${token}</div>
-          <p class="countdown">Redirigiendo en ${seconds} segundos...</p>
-        </div>
-      `;
+      body {
+        background: linear-gradient(135deg, #a8edea, #fed6e3);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-      // Actualizar contador
-      const countdownInterval = setInterval(() => {
-        seconds--;
-        document.querySelector('.countdown').textContent = `Redirigiendo en ${seconds} segundos...`;
-        
-        if (seconds <= 0) {
-          clearInterval(countdownInterval);
-          window.location.href = '/dashboard.html';
+      .login-box {
+        background: rgba(255, 255, 255, 0.25);
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 400px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .login-box h2 {
+        text-align: center;
+        color: #264653;
+        margin-bottom: 2rem;
+        font-weight: 600;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 12px 40px 12px 40px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        transition: 0.3s ease;
+        background: #fff;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #2a9d8f;
+        box-shadow: 0 0 5px rgba(42, 157, 143, 0.3);
+      }
+
+      .input-group .icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #2a9d8f;
+      }
+
+      .input-group .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #999;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .input-group .toggle-password i {
+        width: 100%;
+        height: 100%;
+      }
+
+      button {
+        width: 100%;
+        background: #2a9d8f;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: background 0.3s ease;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #21867a;
+      }
+
+      .login-box p {
+        text-align: center;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .login-box a {
+        color: #2a9d8f;
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      .login-box a:hover {
+        text-decoration: underline;
+      }
+
+      .token-display {
+        background: #f0f4f8;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 1.5rem;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #333;
+        border-left: 4px solid #2a9d8f;
+      }
+
+      .countdown {
+        margin-top: 10px;
+        color: #666;
+        font-style: italic;
+        text-align: right;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login-box">
+      <h2>Bienvenido</h2>
+
+      <div class="input-group">
+        <i class="icon" data-lucide="user"></i>
+        <input type="text" id="username" placeholder="Usuario" />
+      </div>
+
+      <div class="input-group">
+        <i class="icon" data-lucide="lock"></i>
+        <input type="password" id="password" placeholder="Contraseña" />
+        <button class="toggle-password" onclick="togglePassword()">
+          <i id="eyeIcon" data-lucide="eye-off"></i>
+        </button>
+      </div>
+
+      <button onclick="login()">Iniciar Sesión</button>
+
+      <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
+      <div id="resultado"></div>
+    </div>
+
+    <script>
+      lucide.createIcons();
+
+      function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        const isHidden = passwordField.type === 'password';
+        passwordField.type = isHidden ? 'text' : 'password';
+
+        eyeIcon.setAttribute('data-lucide', isHidden ? 'eye-off' : 'eye');
+        lucide.createIcons(); // refrescar ícono
+      }
+
+      async function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('refreshToken', data.refreshToken);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('justLoggedIn', 'true');
+
+            showTokenWithCountdown(data.token);
+          } else {
+            document.getElementById('resultado').innerText = 'Error: ' + (data.error || data.message);
+          }
+        } catch (error) {
+          document.getElementById('resultado').innerText = 'Error de conexión';
         }
-      }, 1000);
-    }
-  </script>
-</body>
+      }
+
+      function showTokenWithCountdown(token) {
+        const resultado = document.getElementById('resultado');
+        let seconds = 5;
+
+        resultado.innerHTML = `
+          <div class="token-display">
+            <p class="countdown">Redirigiendo en ${seconds} segundos...</p>
+          </div>
+        `;
+        console.log('%c✅ Token recibido correctamente:', 'color: green; font-weight: bold; font-size: 14px;');
+        console.log('%c' + token, 'color: #0a9396; font-family: monospace; font-size: 13px; padding: 4px;');
+
+        const countdownInterval = setInterval(() => {
+          seconds--;
+          document.querySelector('.countdown').textContent = `Redirigiendo en ${seconds} segundos...`;
+
+
+          if (seconds <= 0) {
+            clearInterval(countdownInterval);
+            window.location.href = '/dashboard.html';
+          }
+        }, 1000);
+      }
+    </script>
+  </body>
 </html>

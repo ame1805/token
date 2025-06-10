@@ -67,7 +67,7 @@
       color: #2a9d8f;
     }
 
-    .input-group .toggle-password {
+     .input-group .toggle-password {
       position: absolute;
       right: 12px;
       top: 50%;
@@ -76,6 +76,18 @@
       border: none;
       cursor: pointer;
       color: #999;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    
+
+    }
+     .input-group .toggle-password i {
+      width: 100%;
+      height: 100%;
     }
 
     button {
@@ -143,7 +155,7 @@
       <i class="icon" data-lucide="lock"></i>
       <input type="password" id="password" placeholder="Contraseña">
       <button class="toggle-password" onclick="togglePassword()">
-        <i id="eyeIcon" data-lucide="eye"></i>
+        <i id="eyeIcon" data-lucide="eye-off"></i>
       </button>
     </div>
 
@@ -204,10 +216,12 @@
           <p class="countdown">Redirigiendo en ${seconds} segundos...</p>
         </div>
       `;
+ console.log('%c✅ Token recibido correctamente:', 'color: green; font-weight: bold; font-size: 14px;');
+  console.log('%c' + token, 'color: #0a9396; font-family: monospace; font-size: 13px; padding: 4px;');
 
       const countdownInterval = setInterval(() => {
         seconds--;
-        document.querySelector('.countdown').textContent = `Redirigiendo en ${seconds} segundos...`;
+        document.querySelector('.countdown').textContent = Redirigiendo en ${seconds} segundos...;
 
         if (seconds <= 0) {
           clearInterval(countdownInterval);
